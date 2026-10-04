@@ -10,14 +10,14 @@ import { Order, Taco } from '../order/order.component';
     <h1 class="w4-sr-only">Order Summary</h1>
     @if (order.tacos.length > 0) {
       <ul class="w4-summary-list">
-        @for (taco of order.tacos; track taco.id; let i = $index) {
+        @for (taco of order.tacos; track taco.lineItemId; let i = $index) {
           <li class="w4-line-item">
             <div class="w4-item-heading">
               <strong>Item {{ i + 1 }}: {{ taco.name }}</strong>
               <button
                 type="button"
                 class="w4-btn w4-btn-secondary w4-btn-small"
-                (click)="removeTaco(taco.id)"
+                (click)="removeTaco(taco.lineItemId)"
                 aria-label="Remove {{ taco.name }} from order"
               >
                 Remove Taco
@@ -82,7 +82,9 @@ export class OrderSummaryComponent {
     );
   }
 
-  removeTaco(tacoId: number) {
-    this.tacoRemoved.emit(tacoId);
+  removeTaco(lineItemId: number | undefined) {
+    if (lineItemId !== undefined) {
+      this.tacoRemoved.emit(lineItemId);
+    }
   }
 }

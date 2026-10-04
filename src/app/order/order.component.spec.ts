@@ -8,9 +8,8 @@ describe('OrderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OrderComponent]
-    })
-    .compileComponents();
+      imports: [OrderComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(OrderComponent);
     component = fixture.componentInstance;
@@ -59,7 +58,7 @@ describe('OrderComponent', () => {
     expect(component.quantity).toBe(1);
     expect(component.noOnions).toBe(false);
     expect(component.noCilantro).toBe(false);
-  })
+  });
 
   it('should still reset form values after adding a taco to the order', () => {
     component.selectedTacoId = 3;
@@ -73,5 +72,49 @@ describe('OrderComponent', () => {
     expect(component.quantity).toBe(1);
     expect(component.noOnions).toBe(false);
     expect(component.noCilantro).toBe(false);
+  });
+
+  it('should remove only the selected order line when taco types are duplicated', () => {
+    component.order = {
+      orderId: 5001,
+      tacos: [
+        {
+          id: 1,
+          lineItemId: 1,
+          name: 'Carnitas Taco',
+          price: 3.25,
+          quantity: 1,
+          noOnions: true,
+        },
+        {
+          id: 1,
+          lineItemId: 2,
+          name: 'Carnitas Taco',
+          price: 3.25,
+          quantity: 3,
+          noOnions: true,
+        },
+        {
+          id: 5,
+          lineItemId: 3,
+          name: 'Chicken Taco',
+          price: 3.25,
+          quantity: 2,
+        },
+      ],
+    };
+
+    component.onTacoRemoved(1);
+
+    expect(component.order.tacos.length).toBe(2);
+    expect(
+      component.order.tacos.some((taco) => taco.lineItemId === 1),
+    ).toBeFalse();
+    expect(
+      component.order.tacos.some((taco) => taco.lineItemId === 2),
+    ).toBeTrue();
+    expect(
+      component.order.tacos.some((taco) => taco.lineItemId === 3),
+    ).toBeTrue();
   });
 });

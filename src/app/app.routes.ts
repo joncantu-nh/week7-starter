@@ -13,6 +13,12 @@ export const routes: Routes = [
     component: HomeComponent
   },
   {
+    path: 'featured-tacos',
+    loadComponent: () =>
+      import('./featured-tacos/featured-tacos.component')
+        .then(m => m.FeaturedTacosComponent),
+  },
+  {
     path: 'home',
     component: HomeComponent
   },
